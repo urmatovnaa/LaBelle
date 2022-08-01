@@ -152,11 +152,11 @@ REST_FRAMEWORK = {
     ]
 }
 
-# AUTH_USER_MODEL = 'account.Account'
-#
-# REST_AUTH_SERIALIZERS = {
-#     'USER_DETAILS_SERIALIZER': 'account_app.serializers.AccountSerializer',
-# }
+AUTH_USER_MODEL = 'account.Account'
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'account.serializers.AccountSerializer',
+}
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
