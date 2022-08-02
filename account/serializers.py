@@ -1,13 +1,9 @@
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 
 from account.models import Profession, Account
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    # fullname = serializers.CharField()
-    # username = serializers.CharField()
-    # email = serializers.EmailField()
     confirm_password = serializers.CharField(required=True, min_length=8, write_only=True)
 
     class Meta:

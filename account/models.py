@@ -2,10 +2,12 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from main_project.settings import AUTH_USER_MODEL
 from account.managers import MyAccountManager, get_profile_image_filepath, get_default_profile_image
 
 
 class Profession(models.Model):
+    """ Model of categories/professions """
     name = models.CharField(max_length=60, unique=True)
 
     def clean(self):
@@ -17,6 +19,7 @@ class Profession(models.Model):
 
 
 class Account(AbstractUser):
+    """ My user model """
     username_validator = UnicodeUsernameValidator()
     first_name = None
     last_name = None
@@ -34,7 +37,7 @@ class Account(AbstractUser):
                                       null=True, blank=True,
                                       default=get_default_profile_image)
     info = models.CharField(max_length=255, help_text='timetable, phone_number, location', blank=True, null=True)
-    profession = models.ForeignKey(Profession, models.CASCADE, blank=True, null=True)
+    profession = models.ForeignKey(Profession, on_delete=models.CASCADE, blank=True, null=True)
     web_site = models.URLField(blank=True, null=True)
 
     objects = MyAccountManager()
@@ -48,3 +51,25 @@ class Account(AbstractUser):
     def __str__(self):
         return f'{self.username}'
 
+
+class RatingStar(models.Model):
+    """ Rating Star """
+    value = models.SmallIntegerField()
+
+    def __str__(self):
+        return f'{self.value}'
+
+    class Meta:
+        verbose_name = " Rating Star"
+        verbose_name_plural = "Rating Stars"
+        ordering = ["-value"]
+
+
+class Rating(models.Model):
+    """ Rating for specialists """
+    specialist = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.star} - {self.specialist}"

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'silk',
     # my apps
     'account',
+    'wall_app',
 ]
 
 MIDDLEWARE = [
@@ -158,7 +159,7 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'account.serializers.AccountSerializer',
 }
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
 TEMP = os.path.join(BASE_DIR, 'media_cdn/temp')

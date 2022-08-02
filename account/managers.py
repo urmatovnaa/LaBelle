@@ -5,7 +5,7 @@ class MyAccountManager(BaseUserManager):
     """
        Custom user model manager where email is the unique identifiers
        for authentication instead of usernames.
-       """
+    """
     def create_user(self, fullname, username, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
@@ -44,3 +44,7 @@ def get_profile_image_filepath(self, filename):
 
 def get_default_profile_image():
     return "beauty_media/default_profile_image.png"
+
+
+def get_post_filepath(self, filename):
+    return 'p/' + str(self.pk) + '.png'

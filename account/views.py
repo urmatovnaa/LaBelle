@@ -36,6 +36,6 @@ class LoginView(views.APIView):
 
 
 class ProfessionView(viewsets.ModelViewSet):
-    """Information about category """
+    """Information about category/profession """
     queryset = Profession.objects.all().order_by('-id')
     serializer_class = ProfessionSerializer
