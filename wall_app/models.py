@@ -39,7 +39,7 @@ class Comment(models.Model):
     """ Post comment model """
     user = models.ForeignKey(AUTH_USER_MODEL,
                              related_name='comments',
-                             on_delete=models.CASCADE)
+                             on_delete=models.SET_NULL)
     text = models.CharField(max_length=255)
     data_creating = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey(
@@ -63,9 +63,10 @@ class PriceList(models.Model):
 
 class Review(models.Model):
     """ Specialist review """
-    user = models.ForeignKey(AUTH_USER_MODEL,
-                             related_name='reviews',
-                             on_delete=models.CASCADE)
+    specialist = models.ForeignKey(AUTH_USER_MODEL,
+                                   related_name='reviews',
+                                   on_delete=models.SET_NULL,
+                                   null=True)
     text = models.CharField(max_length=500)
     data_creating = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey(
@@ -74,4 +75,4 @@ class Review(models.Model):
     owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
 
     def __str__(self):
-        return f"{self.owner} - {self.text} - {self.user}"
+        return f"{self.specialist} - {self.text} - {self.owner}"

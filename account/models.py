@@ -12,7 +12,6 @@ class Profession(models.Model):
 
     def clean(self):
         self.name = self.name.capitalize()
-        return self.name
 
     def __str__(self):
         return f'{self.name}'
@@ -39,6 +38,10 @@ class Account(AbstractUser):
     info = models.CharField(max_length=255, help_text='timetable, phone_number, location', blank=True, null=True)
     profession = models.ForeignKey(Profession, on_delete=models.CASCADE, blank=True, null=True)
     web_site = models.URLField(blank=True, null=True)
+    following = models.ManyToManyField('self',
+                                       through='account.Contact',
+                                       related_name='followers',
+                                       symmetrical=False)
 
     objects = MyAccountManager()
 
@@ -73,3 +76,17 @@ class Rating(models.Model):
 
     def __str__(self):
         return f"{self.star} - {self.specialist}"
+
+
+class Contact(models.Model):
+    user_from = models.ForeignKey(AUTH_USER_MODEL,
+                                  related_name='rel_from_set',
+                                  on_delete=models.CASCADE)
+    user_to = models.ForeignKey(AUTH_USER_MODEL,
+                                related_name='rel_to_set',
+                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user_from} follows {self.user_to}'
+
+

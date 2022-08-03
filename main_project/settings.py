@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     # my apps
     'account',
     'wall_app',
+    'notification_app'
 ]
 
 MIDDLEWARE = [
@@ -162,4 +163,3 @@ REST_AUTH_SERIALIZERS = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
-TEMP = os.path.join(BASE_DIR, 'media_cdn/temp')
