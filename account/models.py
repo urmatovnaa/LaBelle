@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from main_project.settings import AUTH_USER_MODEL
-from account.managers import MyAccountManager, get_profile_image_filepath, get_default_profile_image
+from account.managers import MyAccountManager, get_default_profile_image
 
 
 class Profession(models.Model):
@@ -32,7 +32,7 @@ class Account(AbstractUser):
             "unique": "A user with that username already exists.",
         }, )
     email = models.EmailField(unique=True)
-    profile_image = models.ImageField(upload_to=get_profile_image_filepath,
+    profile_image = models.ImageField(upload_to='avatars',
                                       null=True, blank=True,
                                       default=get_default_profile_image)
     info = models.CharField(max_length=255, help_text='timetable, phone_number, location', blank=True, null=True)
@@ -48,34 +48,29 @@ class Account(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['fullname', 'username']
 
-    def get_profile_image_filename(self):
-        return str(self.profile_image)[str(self.profile_image).index('profile_images/' + str(self.pk) + "/"):]
-
     def __str__(self):
         return f'{self.username}'
 
 
-class RatingStar(models.Model):
-    """ Rating Star """
-    value = models.SmallIntegerField()
-
-    def __str__(self):
-        return f'{self.value}'
-
-    class Meta:
-        verbose_name = " Rating Star"
-        verbose_name_plural = "Rating Stars"
-        ordering = ["-value"]
-
-
 class Rating(models.Model):
     """ Rating for specialists """
-    specialist = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL)
-    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
+    RATE_CHOICES = (
+        (1, '1'), (2, '2'),
+        (3, '3'), (4, '4'),
+        (5, '5'), (6, '6'),
+        (7, '7'), (8, '8'),
+        (9, '9'), (10, '10'),
+    )
+    specialist = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='rating')
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.SET_NULL)
+    star = models.FloatField('Рейтинг', choices=RATE_CHOICES, null=True)
 
     def __str__(self):
-        return f"{self.star} - {self.specialist}"
+        return f'{self.star} - {self.specialist.username} by {self.user.username}'
+
+    class Meta:
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
 
 
 class Contact(models.Model):

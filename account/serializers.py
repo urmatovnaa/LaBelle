@@ -1,6 +1,13 @@
 from rest_framework import serializers
 
-from account.models import Profession, Account
+from account.models import Profession, Account, Rating
+
+
+class MyUserRatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rating
+        fields = '__all__'
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -38,3 +45,16 @@ class ProfessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profession
         fields = '__all__'
+
+
+class SpecialistListSerializer(serializers.ModelSerializer):
+    rate = MyUserRatingSerializer(many=True)
+    rating_count = serializers.IntegerField(read_only=True)
+    _average_rating = serializers.DecimalField(read_only=True, max_digits=4, decimal_places=2)
+
+    class Meta:
+        model = Account
+        fields = ['username', 'profile_image', 'rate', '_average_rating', 'rating_count']
+
+# class SpecialistDetailSerializer(serializers.ModelSerializer):
+

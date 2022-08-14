@@ -38,13 +38,6 @@ class MyAccountManager(BaseUserManager):
         return user
 
 
-def get_profile_image_filepath(self, filename):
-    return 'profile_images/' + str(self.pk) + '/profile_image.png'
-
-
 def get_default_profile_image():
     return "beauty_media/default_profile_image.png"
 
-
-def get_post_filepath(self, filename):
-    return 'p/' + str(self.pk) + '.png'
