@@ -16,6 +16,10 @@ class Profession(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    class Meta:
+        verbose_name = 'Профессия'
+        verbose_name_plural = 'Профессии'
+
 
 class Account(AbstractUser):
     """ My user model """
@@ -62,8 +66,8 @@ class Rating(models.Model):
         (9, '9'), (10, '10'),
     )
     specialist = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='rating')
-    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.SET_NULL)
-    star = models.FloatField('Рейтинг', choices=RATE_CHOICES, null=True)
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='specialist', null=True)
+    star = models.FloatField('Рейтинг', choices=RATE_CHOICES)
 
     def __str__(self):
         return f'{self.star} - {self.specialist.username} by {self.user.username}'
@@ -83,5 +87,10 @@ class Contact(models.Model):
 
     def __str__(self):
         return f'{self.user_from} follows {self.user_to}'
+
+    class Meta:
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'
+
 
 

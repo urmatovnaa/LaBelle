@@ -1,11 +1,11 @@
-from rest_framework import viewsets, views
+from rest_framework import viewsets, views, status
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from drf_yasg.utils import swagger_auto_schema
 
-from account.models import Profession, Account
-from account.serializers import ProfessionSerializer, AccountSerializer, LoginSerializer
+from account.models import Account, Rating
+from account.serializers import AccountSerializer, LoginSerializer, MyUserRatingSerializer
 
 
 class AccountRegisterAPIViews(views.APIView):
@@ -35,7 +35,21 @@ class LoginView(views.APIView):
         return Response({'token': str(token.key)})
 
 
-class ProfessionView(viewsets.ModelViewSet):
-    """Information about category/profession """
-    queryset = Profession.objects.all().order_by('-id')
-    serializer_class = ProfessionSerializer
+class AddStarRatingViewSet(viewsets.ModelViewSet):
+    """Добавление рейтинга фильму"""
+    queryset = Rating.objects.all()
+    serializer_class = MyUserRatingSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(
+            user=self.request.user,
+            product_id=kwargs.get('product_pk')
+        )
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED,
+                        headers=headers)
+
+
+

@@ -3,17 +3,6 @@ from django.db import models
 from main_project.settings import AUTH_USER_MODEL
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Тег')
-
-    class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
-
-    def __str__(self):
-        return self.name
-
-
 class Image(models.Model):
     image = models.ImageField(verbose_name='Изображение', upload_to='post')
     post = models.ForeignKey('wall_app.Post', related_name='image', on_delete=models.CASCADE)
@@ -31,7 +20,6 @@ class Post(models.Model):
     data_creating = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=1000, blank=True, null=True)
     owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tag, verbose_name='Теги', blank=True)
 
     def __str__(self):
         return f'posted by  {self.owner}'
@@ -101,3 +89,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.specialist} - {self.text} - {self.owner}"
+
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"

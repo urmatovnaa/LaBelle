@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 
-from wall_app.models import Post, PriceList, Review, Image, Comment, Tag
+from wall_app.models import Post, PriceList, Review, Image, Comment
 
 
 class PostImageAdminInline(TabularInline):
@@ -19,4 +19,3 @@ class RestaurantModelAdmin(admin.ModelAdmin):
 admin.site.register(PriceList)
 admin.site.register(Review)
 admin.site.register(Comment)
-admin.site.register(Tag)

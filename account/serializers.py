@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from account.models import Profession, Account, Rating
+from account.models import Account, Rating
 
 
 class MyUserRatingSerializer(serializers.ModelSerializer):
@@ -39,12 +39,6 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['email', 'password']
-
-
-class ProfessionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profession
-        fields = '__all__'
 
 
 class SpecialistListSerializer(serializers.ModelSerializer):
